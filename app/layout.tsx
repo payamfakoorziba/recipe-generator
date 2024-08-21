@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import background from "@/public/background.jpg";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn(GeistSans.className, "relative min-h-screen h-full")}>
+        <div className="fixed inset-0 -z-10">
+          <Image
+            src={background}
+            alt="background"
+            fill
+            priority
+            placeholder="blur"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
