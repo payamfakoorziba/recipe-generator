@@ -1,5 +1,6 @@
 import Appear from "@/components/appear";
 import BlurAppear from "@/components/blur-appear";
+import Container from "@/components/container";
 import PromptInput from "@/components/prompt-input";
 import { ArrowRight, ChevronRight } from "lucide-react";
 
@@ -23,7 +24,9 @@ export default function Home() {
         </h2>
       </Appear>
 
-      <PromptInput />
+      <Container>
+        <PromptInput className=" mx-auto mt-9 max-w-lg md:max-w-2xl h-12 md:h-16 w-full" />
+      </Container>
     </main>
   );
 }
