@@ -22,6 +22,7 @@ const PromptInput = ({
   // placeholders?: string[];
 }) => {
   const router = useRouter();
+  const [submitted, setSubmitted] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -31,8 +32,11 @@ const PromptInput = ({
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data.query);
-    router.push(`/search/${encodeURIComponent(data.query)}`);
+    if (!data.query) return;
+    setSubmitted(true);
+    setTimeout(() => {
+      router.push(`/search/${encodeURIComponent(data.query)}`);
+    }, 300);
   }
   const placeholders = [
     "Pepperoni Pizza",
@@ -62,7 +66,7 @@ const PromptInput = ({
           render={({ field }) => (
             <FormControl>
               <input
-                className="relative pl-6 pr-16 h-full w-full  font-light text-foreground focus:outline-none bg-white shadow-xl rounded-full"
+                className="relative pl-6 pr-16 h-full w-full  font-light text-foreground focus:outline-none bg-white rounded-full"
                 // placeholder={placeholders[placeholderIndex]}
                 onKeyDown={(e) => {
                   if (e.key === "Tab") {
@@ -103,6 +107,12 @@ const PromptInput = ({
             <ArrowRight className="text-white size-4 md:size-5 group-hover:translate-x-0.5 transition" />
           </span>
         </button>
+        <motion.div
+          initial={{ filter: "blur(60px)" }}
+          animate={submitted && { filter: "blur(100px)", opacity: 0, scale: 2 }}
+          transition={{ duration: 0.3 }}
+          className="absolute inset-4 bg-black/60 rounded-full -z-10"
+        />
       </form>
     </Form>
   );
