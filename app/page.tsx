@@ -2,7 +2,6 @@ import Appear from "@/components/appear";
 import BlurAppear from "@/components/blur-appear";
 import Container from "@/components/container";
 import PromptInput from "@/components/prompt-input";
-import { ArrowRight, ChevronRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -30,3 +29,11 @@ export default function Home() {
     </main>
   );
 }
+
+const placeholders = [
+  "What's the first rule of Fight Club?",
+  "Who is Tyler Durden?",
+  "Where is Andrew Laeddis Hiding?",
+  "Write a Javascript method to reverse a string",
+  "How to assemble your own PC?",
+];

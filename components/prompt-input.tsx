@@ -7,12 +7,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const formSchema = z.object({
   query: z.string().min(1),
 });
 
-const PromptInput = ({ className }: { className: string }) => {
+const PromptInput = ({
+  className,
+}: // placeholders,
+{
+  className: string;
+  // placeholders?: string[];
+}) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -26,12 +34,27 @@ const PromptInput = ({ className }: { className: string }) => {
     console.log(data.query);
     router.push(`/search/${encodeURIComponent(data.query)}`);
   }
+  const placeholders = [
+    "Pepperoni Pizza",
+    "Spaghetti Carbonara",
+    "Chicken Alfredo",
+    "Ghormeh Sabzi",
+  ];
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const nextIndex = (placeholderIndex + 1) % placeholders.length;
+      setPlaceholderIndex(nextIndex);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [placeholderIndex]); // Depend on `index` to reset timer when it changes
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("relative", className)}
+        className={cn("relative md:text-xl", className)}
       >
         <FormField
           control={form.control}
@@ -39,14 +62,37 @@ const PromptInput = ({ className }: { className: string }) => {
           render={({ field }) => (
             <FormControl>
               <input
-                className="relative pl-6 pr-16 h-full w-full md:text-xl font-light text-muted-foreground focus:outline-none bg-white shadow-xl rounded-full"
-                placeholder="Spaghetti carbonara"
+                className="relative pl-6 pr-16 h-full w-full  font-light text-foreground focus:outline-none bg-white shadow-xl rounded-full"
+                // placeholder={placeholders[placeholderIndex]}
+                onKeyDown={(e) => {
+                  if (e.key === "Tab") {
+                    form.setValue("query", placeholders[placeholderIndex]);
+                  }
+                }}
                 autoFocus
                 {...field}
               />
             </FormControl>
           )}
-        ></FormField>
+        />
+        <AnimatePresence>
+          {!form.watch("query") && (
+            <motion.p
+              initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
+              transition={{ duration: 0.3 }}
+              style={{
+                translateY: "-50%",
+              }}
+              className="absolute inset-y-0 top-1/2 translate-y-[calc(-50%)] left-6 h-fit select-none pointer-events-none text-muted-foreground font-light"
+              key={placeholderIndex}
+            >
+              {placeholders[placeholderIndex]}
+            </motion.p>
+          )}
+        </AnimatePresence>
+
         <button>
           <span
             className={cn(

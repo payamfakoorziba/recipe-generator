@@ -1,17 +1,7 @@
 import { z } from "zod";
 
-// define a schema for the notifications
-export const notificationSchema = z.object({
-  notifications: z.array(
-    z.object({
-      name: z.string().describe("Name of a fictional person."),
-      message: z.string().describe("Message. Do not use emojis or links."),
-    })
-  ),
-});
-
 export const recipeSchema = z.object({
-  title: z.string().min(1).describe("Name of the dish"),
+  title: z.string().min(1).describe("Name of the dish, capitalized"),
   servings: z.number().int().positive().describe("Number of servings"),
   time: z.number().int().positive().describe("Time in minutes"),
   difficulty: z.enum(["easy", "medium", "hard"]).describe("Difficulty level"),
