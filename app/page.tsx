@@ -3,6 +3,13 @@ import BlurAppear from "@/components/blur-appear";
 import Container from "@/components/container";
 import PromptInput from "@/components/prompt-input";
 
+const placeholders = [
+  "Pepperoni Pizza",
+  "Spaghetti Carbonara",
+  "Chicken Alfredo",
+  "Ghormeh Sabzi",
+];
+
 export default function Home() {
   return (
     <main className=" h-screen flex flex-col items-center justify-center gap-4 text-center">
@@ -24,16 +31,11 @@ export default function Home() {
       </Appear>
 
       <Container>
-        <PromptInput className=" mx-auto mt-9 max-w-lg md:max-w-2xl h-12 md:h-16 w-full" />
+        <PromptInput
+          className="mx-auto mt-9 max-w-lg md:max-w-2xl h-12 md:h-16 w-full"
+          placeholders={placeholders}
+        />
       </Container>
     </main>
   );
 }
-
-const placeholders = [
-  "What's the first rule of Fight Club?",
-  "Who is Tyler Durden?",
-  "Where is Andrew Laeddis Hiding?",
-  "Write a Javascript method to reverse a string",
-  "How to assemble your own PC?",
-];

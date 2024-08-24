@@ -2,15 +2,24 @@
 
 import Container from "@/components/container";
 import { experimental_useObject as useObject } from "ai/react";
-import { recipeSchema } from "@/app/api/recipe/schema";
+import { recipeSchema } from "@/schemas/schema";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import useMeasure from "react-use-measure";
 import { cn } from "@/lib/utils";
 import { Pause } from "lucide-react";
 import AnimateText from "@/components/animate-text";
+import PromptInput from "@/components/prompt-input";
+
+const placeholders = [
+  "Make it gluten-free.",
+  "Exclude nuts from the ingredients.",
+  "Use only low-calorie options.",
+  "Make this dish suitable for a keto diet.",
+  "Substitute dairy with plant-based alternatives.",
+];
 
 const QueryResultPage = ({
   params: { query },
@@ -41,13 +50,13 @@ const QueryResultPage = ({
           </h1>
           {/* Manually control the generation */}
           {/* <div className="flex items-center gap-6 mt-4">
-        <Button onClick={() => submit(query)} disabled={isLoading}>
-          Generate
-        </Button>
-        <Button type="button" onClick={() => stop()}>
-          Stop
-        </Button>
-      </div> */}
+            <Button onClick={() => submit(query)} disabled={isLoading}>
+              Generate
+            </Button>
+            <Button type="button" onClick={() => stop()}>
+              Stop
+            </Button>
+          </div> */}
 
           <div className="flex flex-wrap gap-2 md:gap-4 mt-5">
             {object?.servings && (
@@ -55,7 +64,12 @@ const QueryResultPage = ({
             )}
             {object?.time && <Badge>🕒&nbsp;{object?.time} mins</Badge>}
             {object?.difficulty && (
-              <Badge>⭐️&nbsp;{object?.difficulty} Difficulty</Badge>
+              <Badge>
+                ⭐️&nbsp;
+                {object?.difficulty?.charAt(0).toUpperCase() +
+                  object?.difficulty?.slice(1)}{" "}
+                Difficulty
+              </Badge>
             )}
             {object?.calories && <Badge>🔥&nbsp;{object?.calories} cal</Badge>}
           </div>
@@ -147,13 +161,23 @@ const QueryResultPage = ({
           </motion.div>
         )}
       </div>
-      {isLoading && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center">
-          <Button type="button" size="icon" onClick={() => stop()}>
-            <Pause size={16} />
+
+      <div className="fixed bottom-0 inset-x-0">
+        <Container className="absolute left-1/2 -translate-x-1/2 flex items-center gap-x-4 bottom-4">
+          <PromptInput
+            className="w-full h-9 md:h-12 text-sm md:text-base"
+            placeholders={placeholders}
+          />
+          <Button
+            disabled={!isLoading}
+            type="button"
+            onClick={() => stop()}
+            className="size-9 md:size-12 p-2"
+          >
+            <Pause className="size-4" />
           </Button>
-        </div>
-      )}
+        </Container>
+      </div>
     </Container>
   );
 };

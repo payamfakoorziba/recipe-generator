@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { streamObject } from "ai";
-import { recipeSchema } from "./schema";
+import { recipeSchema } from "../../../schemas/schema";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -15,6 +15,9 @@ export async function POST(req: Request) {
       `Generate a recipe for this dish:` +
       dish +
       " .Use the most necceasary ingredients and steps.",
+    onFinish({ usage }) {
+      console.log("Token usage:", usage);
+    },
   });
 
   return result.toTextStreamResponse();

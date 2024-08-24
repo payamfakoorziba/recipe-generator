@@ -1,7 +1,7 @@
 "use client";
 
 import { experimental_useObject as useObject } from "ai/react";
-import { recipeSchema } from "@/app/api/recipe/schema";
+import { recipeSchema } from "@/schemas/schema";
 
 export default function Page() {
   const { object, submit, isLoading, stop } = useObject({
