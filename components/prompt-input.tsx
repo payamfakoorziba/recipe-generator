@@ -17,9 +17,11 @@ const formSchema = z.object({
 const PromptInput = ({
   className,
   placeholders,
+  inputProps,
 }: {
   className: string;
   placeholders: string[];
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }) => {
   const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
@@ -67,8 +69,8 @@ const PromptInput = ({
                     form.setValue("query", placeholders[placeholderIndex]);
                   }
                 }}
-                autoFocus
                 {...field}
+                {...inputProps}
               />
             </FormControl>
           )}

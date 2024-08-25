@@ -2,7 +2,6 @@
 
 import Container from "@/components/container";
 import { experimental_useObject as useObject } from "ai/react";
-import { recipeSchema } from "@/schemas/schema";
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,7 +10,9 @@ import useMeasure from "react-use-measure";
 import { cn } from "@/lib/utils";
 import { Pause } from "lucide-react";
 import AnimateText from "@/components/animate-text";
-import PromptInput from "@/components/prompt-input";
+import ModifyRecipeInput from "@/components/modify-recipe-input";
+import { recipeSchema } from "@/schemas/schema";
+import { useRecipeStore } from "@/hooks/use-recipe-store";
 
 const placeholders = [
   "Make it gluten-free.",
@@ -23,21 +24,40 @@ const placeholders = [
 
 const QueryResultPage = ({
   params: { query },
+  searchParams: { modifications },
 }: {
   params: { query: string };
+  searchParams: { modifications?: string };
 }) => {
+  const recipe = useRecipeStore((state) => state.recipe);
+  const updateRecipe = useRecipeStore((state) => state.updateRecipe);
+  const hasHydrated = useRecipeStore((state) => state._hasHydrated);
+
   const { object, submit, isLoading, stop } = useObject({
-    api: "/api/recipe",
+    api: !modifications ? "/api/generate-recipe" : "/api/modify-recipe",
     schema: recipeSchema,
+    onFinish: (result) => {
+      console.log("recipe generated", result.object);
+      updateRecipe(result.object!);
+    },
   });
+
+  const dish = decodeURIComponent(query);
 
   const hasMounted = useRef<boolean>(false);
   useEffect(() => {
+    if (!hasHydrated) return;
     if (!hasMounted.current) {
-      submit(decodeURIComponent(query));
+      if (modifications && recipe) {
+        console.log({ recipe, modifications: modifications });
+        submit({ recipe, modifications: modifications });
+      } else {
+        console.log({ dish });
+        submit(dish);
+      }
       hasMounted.current = true;
     }
-  }, []);
+  }, [hasHydrated, dish, modifications]);
 
   let [ref, { height }] = useMeasure();
 
@@ -88,7 +108,10 @@ const QueryResultPage = ({
                   <div className="flex flex-col gap-4 md:gap-6 p-6">
                     {object.ingredients.map((ingredient, index) => {
                       return (
-                        <div key={index} className="flex items-center gap-2">
+                        <div
+                          key={`ingredient ` + index}
+                          className="flex items-center gap-2"
+                        >
                           <Checkbox
                             className="border-white rounded-none size-3 md:size-4"
                             id={`ingredient-${index}`}
@@ -121,7 +144,7 @@ const QueryResultPage = ({
               <div className="flex flex-col gap-6 mt-6 md:mt-8">
                 {object.steps.map((step, index) => {
                   return (
-                    <Resizable key={step?.title}>
+                    <Resizable key={`step ` + index}>
                       <div className="bg-white/10 border border-white/30 p-6 flex flex-col md:flex-row items-start gap-6 rounded-lg">
                         <div className="relative bg-white/10 size-[32px] rounded-full flex-shrink-0">
                           <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-lg">
@@ -164,9 +187,10 @@ const QueryResultPage = ({
 
       <div className="fixed bottom-0 inset-x-0">
         <Container className="absolute left-1/2 -translate-x-1/2 flex items-center gap-x-4 bottom-4">
-          <PromptInput
+          <ModifyRecipeInput
             className="w-full h-9 md:h-12 text-sm md:text-base"
             placeholders={placeholders}
+            dish={dish}
           />
           <Button
             disabled={!isLoading}

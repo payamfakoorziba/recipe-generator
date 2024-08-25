@@ -9,7 +9,6 @@ const AnimateText = ({ children }: { children?: string }) => {
   useEffect(() => {
     if (!children) return;
     setParts(children.split(" "));
-    console.log("parts", parts);
   }, [children]);
 
   return (

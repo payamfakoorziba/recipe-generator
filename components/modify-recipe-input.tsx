@@ -14,12 +14,14 @@ const formSchema = z.object({
   query: z.string().min(1),
 });
 
-const PromptInput = ({
+const ModifyRecipeInput = ({
   className,
   placeholders,
+  dish,
 }: {
   className: string;
   placeholders: string[];
+  dish: string;
 }) => {
   const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
@@ -35,7 +37,11 @@ const PromptInput = ({
     if (!data.query) return;
     setSubmitted(true);
     setTimeout(() => {
-      router.push(`/search/${encodeURIComponent(data.query)}`);
+      window.location.replace(
+        `/search/${encodeURIComponent(dish)}?modifications=${encodeURIComponent(
+          data.query
+        )}`
+      );
     }, 300);
   }
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
@@ -112,4 +118,4 @@ const PromptInput = ({
   );
 };
 
-export default PromptInput;
+export default ModifyRecipeInput;

@@ -1,3 +1,5 @@
+"use client";
+
 import Appear from "@/components/appear";
 import BlurAppear from "@/components/blur-appear";
 import Container from "@/components/container";
@@ -34,6 +36,9 @@ export default function Home() {
         <PromptInput
           className="mx-auto mt-9 max-w-lg md:max-w-2xl h-12 md:h-16 w-full"
           placeholders={placeholders}
+          inputProps={{
+            autoFocus: true,
+          }}
         />
       </Container>
     </main>
