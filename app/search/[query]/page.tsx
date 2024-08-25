@@ -191,6 +191,7 @@ const QueryResultPage = ({
             className="w-full h-9 md:h-12 text-sm md:text-base"
             placeholders={placeholders}
             dish={dish}
+            disabled={isLoading}
           />
           <Button
             disabled={!isLoading}

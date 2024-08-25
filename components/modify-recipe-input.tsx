@@ -18,10 +18,12 @@ const ModifyRecipeInput = ({
   className,
   placeholders,
   dish,
+  disabled,
 }: {
   className: string;
   placeholders: string[];
   dish: string;
+  disabled?: boolean;
 }) => {
   const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
@@ -66,7 +68,7 @@ const ModifyRecipeInput = ({
           render={({ field }) => (
             <FormControl>
               <input
-                className="relative pl-6 pr-16 h-full w-full  font-light text-foreground focus:outline-none bg-white rounded-full"
+                className="relative pl-6 pr-16 h-full w-full  font-light text-foreground focus:outline-none bg-white rounded-full disabled:opacity-80 disabled:cursor-not-allowed"
                 // placeholder={placeholders[placeholderIndex]}
                 onKeyDown={(e) => {
                   if (e.key === "Tab") {
@@ -74,6 +76,7 @@ const ModifyRecipeInput = ({
                   }
                 }}
                 autoFocus
+                disabled={disabled}
                 {...field}
               />
             </FormControl>
