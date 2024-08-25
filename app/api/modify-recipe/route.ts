@@ -25,14 +25,10 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
 
-  console.log(body);
-
   const prompt =
     `Apply the following modifications to ${JSON.stringify(body.recipe)}:` +
     body.modifications +
     " .Use the most necessary ingredients and steps. Include the modification in the title of the recipe.";
-
-  console.log("Prompt:", prompt);
 
   const result = await streamObject({
     model: openai("gpt-4-turbo"),

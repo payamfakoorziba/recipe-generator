@@ -17,7 +17,6 @@ export const useRecipeStore = create(
     (set) => ({
       recipe: null,
       updateRecipe: (newRecipe) => {
-        console.log("updating recipe", newRecipe);
         set({ recipe: newRecipe });
       },
       _hasHydrated: false,

@@ -37,7 +37,6 @@ const QueryResultPage = ({
     api: !modifications ? "/api/generate-recipe" : "/api/modify-recipe",
     schema: recipeSchema,
     onFinish: (result) => {
-      console.log("recipe generated", result.object);
       updateRecipe(result.object!);
     },
   });
@@ -49,10 +48,8 @@ const QueryResultPage = ({
     if (!hasHydrated) return;
     if (!hasMounted.current) {
       if (modifications && recipe) {
-        console.log({ recipe, modifications: modifications });
         submit({ recipe, modifications: modifications });
       } else {
-        console.log({ dish });
         submit(dish);
       }
       hasMounted.current = true;
@@ -60,6 +57,15 @@ const QueryResultPage = ({
   }, [hasHydrated, dish, modifications]);
 
   let [ref, { height }] = useMeasure();
+  const bottomRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [object]);
 
   return (
     <Container className="py-16 sm:py-20 md:py-32 text-white">
@@ -184,7 +190,6 @@ const QueryResultPage = ({
           </motion.div>
         )}
       </div>
-
       <div className="fixed bottom-0 inset-x-0">
         <Container className="absolute left-1/2 -translate-x-1/2 flex items-center gap-x-4 bottom-4">
           <ModifyRecipeInput
@@ -203,6 +208,7 @@ const QueryResultPage = ({
           </Button>
         </Container>
       </div>
+      <div ref={bottomRef} />
     </Container>
   );
 };
