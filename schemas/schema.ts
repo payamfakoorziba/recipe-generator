@@ -26,4 +26,10 @@ export const recipeSchema = z.object({
       description: z.string().min(1).describe("Description of the step"),
     })
   ),
+  hueRotate: z
+    .number()
+    .int()
+    .min(0)
+    .max(360)
+    .describe("Degrees to rotate the hue of the background image"),
 });

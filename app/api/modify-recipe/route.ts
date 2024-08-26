@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const prompt =
     `Apply the following modifications to ${JSON.stringify(body.recipe)}:` +
     body.modifications +
-    " .Use the most necessary ingredients and steps. Include the modification in the title of the recipe.";
+    " .Use the most necessary ingredients and steps. Include the modification in the title of the recipe. Rotate the background hue based on the color of the dish. The background image is a gradient of soft pink (#F7A8B8), purple (#A17EB8), and blue (#7288C7) tones.";
 
   const result = await streamObject({
     model: openai("gpt-4-turbo"),

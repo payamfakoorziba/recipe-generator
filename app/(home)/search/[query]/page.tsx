@@ -38,6 +38,7 @@ const QueryResultPage = ({
     schema: recipeSchema,
     onFinish: (result) => {
       updateRecipe(result.object!);
+      console.log("hue rotate", result.object?.hueRotate);
     },
   });
 

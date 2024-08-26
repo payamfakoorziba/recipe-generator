@@ -92,7 +92,7 @@ const ModifyRecipeInput = ({
               style={{
                 translateY: "-50%",
               }}
-              className="absolute inset-y-0 top-1/2 translate-y-[calc(-50%)] left-6 h-fit select-none pointer-events-none text-muted-foreground font-light"
+              className="absolute inset-y-0 top-1/2 translate-y-[calc(-50%)] left-6 h-fit select-none pointer-events-none text-muted-foreground font-light truncate"
               key={placeholderIndex}
             >
               {placeholders[placeholderIndex]}
@@ -104,7 +104,7 @@ const ModifyRecipeInput = ({
           <span
             className={cn(
               "absolute inset-y-2 right-2 bg-neutral-300 rounded-full flex items-center justify-center aspect-square group transition",
-              !form.watch("query") ? "bg-neutral-300" : "bg-neutral-400"
+              !form.watch("query") ? "bg-neutral-600" : "bg-primary"
             )}
           >
             <ArrowRight className="text-white size-4 md:size-5 group-hover:translate-x-0.5 transition" />
